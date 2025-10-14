@@ -1,19 +1,19 @@
 package agh.ics.concurrency;
 
-public class Lab1 {
+public class IncDec {
     int number = 0;
 
-    public Lab1() {
+    public IncDec() {
     }
 
     public void run() {
-        Lab1 lab1 = new Lab1();
+        IncDec IncDec = new IncDec();
         Thread[] threads = new Thread[100];
 
         for (int i = 0; i < 50; i++) {
             threads[i] = new Thread(() -> {
                 for (int j = 0; j < 100; j++) {
-                    lab1.inc();
+                    IncDec.inc();
                 }
             });
         }
@@ -21,7 +21,7 @@ public class Lab1 {
         for (int i = 50; i < 100; i++) {
             threads[i] = new Thread(() -> {
                 for (int j = 0; j < 100; j++) {
-                    lab1.dec();
+                    IncDec.dec();
                 }
             });
         }
@@ -38,7 +38,7 @@ public class Lab1 {
             }
         }
 
-        lab1.print();
+        IncDec.print();
 
     }
 
