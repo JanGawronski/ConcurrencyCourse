@@ -1,4 +1,4 @@
-package agh.ics.concurrency;
+package agh.ics.concurrency.lab1;
 
 public class IncDec {
     int number = 0;

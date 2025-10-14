@@ -1,4 +1,4 @@
-package agh.ics.concurrency;
+package agh.ics.concurrency.lab1;
 
 public class ProducerConsumer {
     boolean available = false;
