@@ -5,39 +5,45 @@ public class Run {
     public Run() {
     }
     
-    public void run() {
-        final int loops = 1000;
+    public void run(int producersCount, int consumersCount) {
         ProducerConsumer pc = new ProducerConsumer();
 
-        Thread producer = new Thread(() -> {
-            for (int i = 0;; i++) {
-                pc.produce();
-                System.out.println("Produced");
-            }
-        });
+        Thread[] producers = new Thread[producersCount];
+        Thread[] consumers = new Thread[consumersCount];
 
-        Thread producer1 = new Thread(() -> {
-            for (int i = 0;; i++) {
-                pc.produce();
-                System.out.println("Produced");
-            }
-        });
+        for (int j = 0; j < producersCount; j++) {
+            producers[j] = new Thread(() -> {
+                for (int i = 0;; i++) {
+                    pc.produce();
+                    System.out.println("Produced " + i);
+                }
+            });
+        }
 
-        Thread consumer = new Thread(() -> {
-            for (int i = 0;; i++) {
-                pc.consume();
-                System.out.println("Consumed");
-            }
-        });
+        for (int j = 0; j < consumersCount; j++) {
+            consumers[j] = new Thread(() -> {
+                for (int i = 0;; i++) {
+                    pc.consume();
+                    System.out.println("Consumed " + i);
+                }
+            });
+        }
 
-        producer.start();
-        producer1.start();
-        consumer.start();
+        for (Thread producer : producers) {
+            producer.start();
+        }
+
+        for (Thread consumer : consumers) {
+            consumer.start();
+        }
 
         try {
-            producer.join();
-            producer1.join();
-            consumer.join();
+            for (Thread producer : producers) {
+                producer.join();
+            }
+            for (Thread consumer : consumers) {
+                consumer.join();
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
