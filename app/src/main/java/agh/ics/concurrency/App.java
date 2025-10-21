@@ -7,6 +7,6 @@ import agh.ics.concurrency.lab2.Run;
 public class App {
 
     public static void main(String[] args) {
-        new Run().run(1, 1);
+        new Run().run(4, 4, 2);
     }
 }

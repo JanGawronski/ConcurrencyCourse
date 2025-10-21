@@ -5,8 +5,8 @@ public class Run {
     public Run() {
     }
     
-    public void run(int producersCount, int consumersCount) {
-        ProducerConsumer pc = new ProducerConsumer();
+    public void run(int producersCount, int consumersCount, int bufferMax) {
+        ProducerConsumerMultipleBuffer pc = new ProducerConsumerMultipleBuffer(bufferMax);
 
         Thread[] producers = new Thread[producersCount];
         Thread[] consumers = new Thread[consumersCount];

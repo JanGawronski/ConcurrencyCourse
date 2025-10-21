@@ -4,7 +4,7 @@ public class ProducerConsumer {
     private boolean available = false;
 
     public ProducerConsumer() {
-    }
+}   
 
     /* why doesnt work
     p1  notifies nobody var=1 {p1, p2, c}
