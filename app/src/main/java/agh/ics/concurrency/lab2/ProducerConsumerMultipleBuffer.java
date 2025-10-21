@@ -5,7 +5,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class ProducerConsumerMultipleBuffer {
     private int buffer = 0;
     private final int bufferMax;
-    private ReentrantLock lock = new ReentrantLock();
+    private final ReentrantLock lock = new ReentrantLock();
 
     public ProducerConsumerMultipleBuffer(int bufferMax) {
         this.bufferMax = bufferMax;
@@ -22,7 +22,7 @@ public class ProducerConsumerMultipleBuffer {
     p2  waits                 {}
     */
 
-    synchronized public void produce() {
+    public void produce() {
         while (true) {
             lock.lock();
             if (buffer == bufferMax) {
@@ -36,7 +36,7 @@ public class ProducerConsumerMultipleBuffer {
         lock.unlock();
     }
 
-    synchronized public void consume() {
+    public void consume() {
         while (true) {
             lock.lock();
             if (buffer == 0) {
@@ -50,7 +50,7 @@ public class ProducerConsumerMultipleBuffer {
         lock.unlock();
     }
 
-    synchronized public void print() {
+    public void print() {
         System.out.println(this.buffer);
     }
 
