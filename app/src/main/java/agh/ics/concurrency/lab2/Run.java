@@ -12,19 +12,21 @@ public class Run {
         Thread[] consumers = new Thread[consumersCount];
 
         for (int j = 0; j < producersCount; j++) {
+            final int producerId = j;
             producers[j] = new Thread(() -> {
                 for (int i = 0;; i++) {
                     pc.produce();
-                    System.out.println("Produced " + i);
+                    System.out.println(producerId + " produced");
                 }
             });
         }
 
         for (int j = 0; j < consumersCount; j++) {
+            final int consumerId = j;
             consumers[j] = new Thread(() -> {
                 for (int i = 0;; i++) {
                     pc.consume();
-                    System.out.println("Consumed " + i);
+                    System.out.println(consumerId + " consumed");
                 }
             });
         }
