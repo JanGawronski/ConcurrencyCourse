@@ -15,8 +15,7 @@ public class Run {
             final int producerId = j;
             producers[j] = new Thread(() -> {
                 for (int i = 0;; i++) {
-                    pc.produce();
-                    System.out.println(producerId + " produced");
+                    pc.produce(producerId);
                 }
             });
         }
@@ -25,8 +24,7 @@ public class Run {
             final int consumerId = j;
             consumers[j] = new Thread(() -> {
                 for (int i = 0;; i++) {
-                    pc.consume();
-                    System.out.println(consumerId + " consumed");
+                    pc.consume(consumerId);
                 }
             });
         }

@@ -16,15 +16,20 @@ public class IncorrectRandomProduceConsume {
         this.bufferMax = bufferMax;
     }   
 
-    public void produce() {
+    public void produce(int id) {
         lock.lock();
         try {
-            while (lock.hasWaiters(firstProd))
+            while (lock.hasWaiters(firstProd)) {
+                System.out.println(id + " waits on restProd");
                 restProd.await();
+            }
             int toAdd = (int)(Math.random() * bufferMax / 2) + 1;
-            while (buffer + toAdd >= bufferMax)
+            while (buffer + toAdd >= bufferMax) {
+                System.out.println(id + " waits on firstProd");
                 firstProd.await();
+            }           
             buffer += toAdd;
+            System.out.println(id + " produced " + toAdd);
             restProd.signal();
             firstCons.signal();
         } catch (InterruptedException e) {
@@ -34,15 +39,20 @@ public class IncorrectRandomProduceConsume {
         }    
     }
 
-    public void consume() {
+    public void consume(int id) {
         lock.lock();
         try {
-            while (lock.hasWaiters(firstCons))
+            while (lock.hasWaiters(firstCons)) {
+                System.out.println(id + " waits on restCons");
                 restCons.await();
+            }
             int toRemove = (int)(Math.random() * bufferMax / 2) + 1;
-            while (buffer - toRemove < 0)
+            while (buffer - toRemove < 0) {
+                System.out.println(id + " waits on firstCons");
                 firstCons.await();
+            }
             buffer -= toRemove;
+            System.out.println(id + " consumed " + toRemove);
             restCons.signal();
             firstProd.signal();
         } catch (InterruptedException e) {
