@@ -6,7 +6,7 @@ public class Run {
     }
     
     public void run(int producersCount, int consumersCount, int bufferMax) {
-        CorrectRandomProduceConsume pc = new CorrectRandomProduceConsume(bufferMax);
+        IncorrectRandomProduceConsume pc = new IncorrectRandomProduceConsume(bufferMax);
 
         Thread[] producers = new Thread[producersCount];
         Thread[] consumers = new Thread[consumersCount];

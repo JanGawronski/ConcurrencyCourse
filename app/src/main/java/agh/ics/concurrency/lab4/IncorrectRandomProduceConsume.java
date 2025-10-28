@@ -13,7 +13,7 @@ public class IncorrectRandomProduceConsume {
     private final Condition restCons = lock.newCondition();
 
     public IncorrectRandomProduceConsume(int bufferMax) {
-        this.bufferMax = 2 * bufferMax;
+        this.bufferMax = bufferMax;
     }   
 
     public void produce() {
@@ -21,7 +21,7 @@ public class IncorrectRandomProduceConsume {
         try {
             while (lock.hasWaiters(firstProd))
                 restProd.await();
-            int toAdd = (int)(Math.random() * bufferMax);
+            int toAdd = (int)(Math.random() * bufferMax / 2) + 1;
             while (buffer + toAdd >= bufferMax)
                 firstProd.await();
             buffer += toAdd;
@@ -39,7 +39,7 @@ public class IncorrectRandomProduceConsume {
         try {
             while (lock.hasWaiters(firstCons))
                 restCons.await();
-            int toRemove = (int)(Math.random() * bufferMax);
+            int toRemove = (int)(Math.random() * bufferMax / 2) + 1;
             while (buffer - toRemove < 0)
                 firstCons.await();
             buffer -= toRemove;

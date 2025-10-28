@@ -17,7 +17,7 @@ public class CorrectRandomProduceConsume {
     private int firstConsWait = 0;
 
     public CorrectRandomProduceConsume(int bufferMax) {
-        this.bufferMax = 2 * bufferMax;
+        this.bufferMax = bufferMax;
     }   
 
     public void produce() {
@@ -26,7 +26,7 @@ public class CorrectRandomProduceConsume {
             while (firstProdWait > 0)
                 restProd.await();
             firstProdWait++;
-            int toAdd = (int)(Math.random() * bufferMax);
+            int toAdd = (int)(Math.random() * bufferMax / 2) + 1;
             while (buffer + toAdd >= bufferMax)
                 firstProd.await();
             buffer += toAdd;
@@ -46,7 +46,7 @@ public class CorrectRandomProduceConsume {
             while (firstConsWait > 0)
                 restCons.await();
             firstConsWait++;
-            int toRemove = (int)(Math.random() * bufferMax);
+            int toRemove = (int)(Math.random() * bufferMax / 2) + 1;
             while (buffer - toRemove < 0)
                 firstCons.await();
             buffer -= toRemove;
