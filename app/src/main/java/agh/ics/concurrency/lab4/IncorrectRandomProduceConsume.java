@@ -30,6 +30,8 @@ public class IncorrectRandomProduceConsume {
             }           
             buffer += toAdd;
             System.out.println(id + " produced " + toAdd);
+            System.out.println(lock.getWaitQueueLength(firstProd) + " waiting on firstProd");
+            System.out.println(lock.getWaitQueueLength(firstCons) + " waiting on firstCons");
             restProd.signal();
             firstCons.signal();
         } catch (InterruptedException e) {
@@ -53,6 +55,8 @@ public class IncorrectRandomProduceConsume {
             }
             buffer -= toRemove;
             System.out.println(id + " consumed " + toRemove);
+            System.out.println(lock.getWaitQueueLength(firstProd) + " waiting on firstProd");
+            System.out.println(lock.getWaitQueueLength(firstCons) + " waiting on firstCons");
             restCons.signal();
             firstProd.signal();
         } catch (InterruptedException e) {
