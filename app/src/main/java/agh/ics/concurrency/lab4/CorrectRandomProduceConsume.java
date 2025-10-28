@@ -13,8 +13,8 @@ public class CorrectRandomProduceConsume {
     private final Condition firstCons = lock.newCondition();
     private final Condition restCons = lock.newCondition();
 
-    private final AtomicInteger firstProdWait = new AtomicInteger(0);
-    private final AtomicInteger firstConsWait = new AtomicInteger(0);
+    private int firstProdWait = 0;
+    private int firstConsWait = 0;
 
     public CorrectRandomProduceConsume(int bufferMax) {
         this.bufferMax = 2 * bufferMax;
@@ -23,14 +23,14 @@ public class CorrectRandomProduceConsume {
     public void produce() {
         lock.lock();
         try {
-            while (firstProdWait.get() > 0)
+            while (firstProdWait > 0)
                 restProd.await();
-            firstProdWait.incrementAndGet();
+            firstProdWait++;
             int toAdd = (int)(Math.random() * bufferMax);
             while (buffer + toAdd >= bufferMax)
                 firstProd.await();
             buffer += toAdd;
-            firstProdWait.decrementAndGet();
+            firstProdWait--;
             restProd.signal();
             firstCons.signal();
         } catch (InterruptedException e) {
@@ -43,14 +43,14 @@ public class CorrectRandomProduceConsume {
     public void consume() {
         lock.lock();
         try {
-            while (firstConsWait.get() > 0)
+            while (firstConsWait > 0)
                 restCons.await();
-            firstConsWait.incrementAndGet();
+            firstConsWait++;
             int toRemove = (int)(Math.random() * bufferMax);
             while (buffer - toRemove < 0)
                 firstCons.await();
             buffer -= toRemove;
-            firstConsWait.decrementAndGet();
+            firstConsWait--;
             restCons.signal();
             firstProd.signal();
         } catch (InterruptedException e) {
