@@ -30,6 +30,11 @@ public class Run {
             producers[j] = new Thread(() -> {
                 for (produceLog[producerId] = 0;; produceLog[producerId]++) {
                     pc.produce(produceAmounts[producerId]);
+                    try {
+                        Thread.sleep(10);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }   
                 }
             });
         }
@@ -39,6 +44,12 @@ public class Run {
             consumers[j] = new Thread(() -> {
                 for (consumeLog[consumerId] = 0;; consumeLog[consumerId]++) {
                     pc.consume(consumeAmounts[consumerId]);
+                    try {
+                        Thread.sleep(10);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }   
+                    
                 }
             });
         }
