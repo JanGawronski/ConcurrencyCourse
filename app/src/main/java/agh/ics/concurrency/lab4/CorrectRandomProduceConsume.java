@@ -1,6 +1,5 @@
 package agh.ics.concurrency.lab4;
 
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -13,24 +12,23 @@ public class CorrectRandomProduceConsume {
     private final Condition firstCons = lock.newCondition();
     private final Condition restCons = lock.newCondition();
 
-    private int firstProdWait = 0;
-    private int firstConsWait = 0;
+    private boolean isFirstProducerWaiting = false;
+    private boolean isFirstConsumerWaiting = false;
 
     public CorrectRandomProduceConsume(int bufferMax) {
         this.bufferMax = bufferMax;
     }   
 
-    public void produce() {
+    public void produce(int amount) {
         lock.lock();
         try {
-            while (firstProdWait > 0)
+            while (isFirstProducerWaiting)
                 restProd.await();
-            firstProdWait++;
-            int toAdd = (int)(Math.random() * bufferMax / 2) + 1;
-            while (buffer + toAdd >= bufferMax)
+            isFirstProducerWaiting = true;
+            while (buffer + amount >= bufferMax)
                 firstProd.await();
-            buffer += toAdd;
-            firstProdWait--;
+            buffer += amount;
+            isFirstProducerWaiting = false;
             restProd.signal();
             firstCons.signal();
         } catch (InterruptedException e) {
@@ -40,17 +38,16 @@ public class CorrectRandomProduceConsume {
         }    
     }
 
-    public void consume() {
+    public void consume(int amount) {
         lock.lock();
         try {
-            while (firstConsWait > 0)
+            while (isFirstConsumerWaiting)
                 restCons.await();
-            firstConsWait++;
-            int toRemove = (int)(Math.random() * bufferMax / 2) + 1;
-            while (buffer - toRemove < 0)
+            isFirstConsumerWaiting = true;
+            while (buffer - amount < 0)
                 firstCons.await();
-            buffer -= toRemove;
-            firstConsWait--;
+            buffer -= amount;
+            isFirstConsumerWaiting = false;
             restCons.signal();
             firstProd.signal();
         } catch (InterruptedException e) {

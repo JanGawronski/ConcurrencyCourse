@@ -16,22 +16,14 @@ public class IncorrectRandomProduceConsume {
         this.bufferMax = bufferMax;
     }   
 
-    public void produce(int id) {
+    public void produce(int amount) {
         lock.lock();
         try {
-            while (lock.hasWaiters(firstProd)) {
-                System.out.println(id + " waits on restProd");
+            while (lock.hasWaiters(firstProd))
                 restProd.await();
-            }
-            int toAdd = (int)(Math.random() * bufferMax / 2) + 1;
-            while (buffer + toAdd >= bufferMax) {
-                System.out.println(id + " waits on firstProd");
+            while (buffer + amount >= bufferMax)
                 firstProd.await();
-            }           
-            buffer += toAdd;
-            System.out.println(id + " produced " + toAdd);
-            System.out.println(lock.getWaitQueueLength(firstProd) + " waiting on firstProd");
-            System.out.println(lock.getWaitQueueLength(firstCons) + " waiting on firstCons");
+            buffer += amount;
             restProd.signal();
             firstCons.signal();
         } catch (InterruptedException e) {
@@ -41,22 +33,14 @@ public class IncorrectRandomProduceConsume {
         }    
     }
 
-    public void consume(int id) {
+    public void consume(int amount) {
         lock.lock();
         try {
-            while (lock.hasWaiters(firstCons)) {
-                System.out.println(id + " waits on restCons");
+            while (lock.hasWaiters(firstCons))
                 restCons.await();
-            }
-            int toRemove = (int)(Math.random() * bufferMax / 2) + 1;
-            while (buffer - toRemove < 0) {
-                System.out.println(id + " waits on firstCons");
+            while (buffer - amount < 0)
                 firstCons.await();
-            }
-            buffer -= toRemove;
-            System.out.println(id + " consumed " + toRemove);
-            System.out.println(lock.getWaitQueueLength(firstProd) + " waiting on firstProd");
-            System.out.println(lock.getWaitQueueLength(firstCons) + " waiting on firstCons");
+            buffer -= amount;
             restCons.signal();
             firstProd.signal();
         } catch (InterruptedException e) {
