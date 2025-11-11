@@ -14,12 +14,12 @@ public class RandomProduceConsume {
         this.bufferMax = bufferMax;
     }   
 
-    public void produce() {
+    public void produce(int amount) {
         lock.lock();
         try {
-            while (buffer >= bufferMax)
+            while (buffer + amount >= bufferMax)
                 notFull.await();
-            buffer += (int)(Math.random() * bufferMax / 2) + 1;
+            buffer += amount;
             notEmpty.signal();
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -28,12 +28,12 @@ public class RandomProduceConsume {
         }    
     }
 
-    public void consume() {
+    public void consume(int amount) {
         lock.lock();
         try {
-            while (buffer <= 0)
+            while (buffer - amount < 0)
                 notEmpty.await();
-            buffer -= (int)(Math.random() * bufferMax / 2) + 1;
+            buffer -= amount;
             notFull.signal();
         } catch (InterruptedException e) {
             e.printStackTrace();

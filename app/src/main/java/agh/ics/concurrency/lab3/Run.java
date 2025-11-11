@@ -1,4 +1,4 @@
-package agh.ics.concurrency.lab4;
+package agh.ics.concurrency.lab3;
 
 public class Run {
 
@@ -6,7 +6,7 @@ public class Run {
     }
     
     public void run(int producersCount, int consumersCount, int bufferMax) {
-        CorrectRandomProduceConsume pc = new CorrectRandomProduceConsume(bufferMax);
+        RandomProduceConsume pc = new RandomProduceConsume(bufferMax);
 
         Thread[] producers = new Thread[producersCount];
         Thread[] consumers = new Thread[consumersCount];

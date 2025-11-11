@@ -1,0 +1,96 @@
+\documentclass[12pt, a4paper]{article}
+\usepackage{fullpage}
+\usepackage[T1]{fontenc}
+\usepackage{multicol}
+\usepackage{amsmath}
+\numberwithin{figure}{subsection}
+\numberwithin{table}{subsection}
+\usepackage{listings}
+\lstset{
+  language=Java,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue}\bfseries,
+  commentstyle=\color{gray},
+  stringstyle=\color{green!50!black},
+  breaklines=true,
+  numbers=left,
+  numberstyle=\tiny,
+  frame=single,
+  captionpos=b
+}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{adjustbox}
+\usepackage{xcolor}
+\usepackage{caption}
+\renewcommand{\thefigure}{\textbf{\arabic{section}.\arabic{figure}}}
+\renewcommand{\figurename}{\textbf{Rysunek}}
+\renewcommand{\thetable}{\textbf{\arabic{section}.\arabic{table}}}
+\renewcommand{\tablename}{\textbf{Tabela}}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    filecolor=black,      
+    urlcolor=black,
+    pdftitle={Producenci i konsumenci bez zagłodzenia},
+    pdfauthor={Jan Gawroński},
+    pdfpagemode=FullScreen,
+    }
+
+\title{\huge{Teoria współbieżności} \break \Large{Producenci i konsumenci bez zagłodzenia}}
+\author{\large{Jan Gawroński}}
+\date{12.11.2025}
+
+\begin{document}
+    \maketitle
+    \section{Poprawny kod (4 warunki + zmnienna logiczna)}
+        \lstinputlisting{CorrectRandomProduceConsume.java}
+    \section{Zagłodzenie na 2 warunkach}
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=\textwidth]{2cond.png}
+        \end{figure}
+
+        Jak do tego dochodzi:
+        
+        bufferMax = 10
+        \begin{enumerate}
+            \item Bufer jest pełny.
+            \item Wchodzi P1, który chce wyprodukować 4 i wiesza się na notFull.
+            \item Wchodzi P2, który chce wyprodukować 1 i wiesza się na notFull.
+            \item Wchodzi K1, konsumuje 2 i budzi P1.
+            \item P1 budzi się i wiesza się na notFull.
+            \item Wchodzi K1, konsumuje 2 i budzi P1.
+            \item P1 budzi się i produkuje 4.
+            \item Wchodzi P1, który chce wyprodukować 4 i wiesza się na notFull.
+        \end{enumerate}
+        Taka sytuacja może się powtarzać w kółko, prowadząc do zagłodzenia P2.
+
+    \section{Zakleszczenie i zagłodzenie na 4 warunkach z hasWaiters()}
+        bufferMax = 10
+        \begin{enumerate}
+            \item K1, który chce skonsumować 3 zawiesza się na firstCons
+            \item P1 produkuje 1 i wywołuje firstCons budząc K1
+            \item K2, który chce skonsumować 3 wiesza się na firstCons (Tutaj dochodzi do zagłodzenia, ponieważ K1 może już nigdy nie zostać wybudzony)
+            \item P1 produkuje 1 i wywołuje firstCons budząc K2
+            \item K3, który chce skonsumować 3 wiesza się na firstCons
+            \item K1 wiesza się na firstCons
+            \item K2 wiesza się na firstCons
+            \item K4, który chce skonsumować 1 wiesza się na restCons
+            \item P2 produkuje 5 i wywołuje firstCons budząc K2
+            \item K2 konsumuje 3 i wywołuje restCons budząc K4
+            \item K4 wiesza się na restCons
+            \item P2 produkuje 5 i wywołuje firstCons budząc K3
+            \item K3 konsumuje 3 i wywołuje restCons budząc K4
+            \item K4 wiesza się na restCons
+            \item P1 wiesza się na firstProd
+            \item P2 - Pp wieszają się na restProd
+            \item K2 wiesza się na restCons
+            \item K3 wiesza się na restCons
+        \end{enumerate}
+
+
+\end{document}
