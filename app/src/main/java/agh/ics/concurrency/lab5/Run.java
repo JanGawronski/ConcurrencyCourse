@@ -6,7 +6,7 @@ public class Run {
     }
     
     public void run(int producersCount, int consumersCount, int bufferMax) {
-        CorrectRandomProduceConsume pc = new CorrectRandomProduceConsume(bufferMax);
+        NestedLocks pc = new NestedLocks(bufferMax);
 
         Thread[] producers = new Thread[producersCount];
         Thread[] consumers = new Thread[consumersCount];
@@ -31,7 +31,7 @@ public class Run {
                 for (produceLog[producerId] = 0;; produceLog[producerId]++) {
                     pc.produce(produceAmounts[producerId]);
                     try {
-                        Thread.sleep(10);
+                        Thread.sleep(1);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }   
@@ -45,7 +45,7 @@ public class Run {
                 for (consumeLog[consumerId] = 0;; consumeLog[consumerId]++) {
                     pc.consume(consumeAmounts[consumerId]);
                     try {
-                        Thread.sleep(10);
+                        Thread.sleep(1);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }   
