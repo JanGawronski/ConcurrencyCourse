@@ -18,27 +18,11 @@ public class Measure {
         int[] produceLog = new int[producersCount];
         int[] consumeLog = new int[consumersCount];
 
-        int[] produceAmounts = new int[producersCount];
-        int[] consumeAmounts = new int[consumersCount];
-
-        for (int j = 0; j < producersCount; j++) {
-            produceAmounts[j] = (int)(Math.random() * (bufferMax / 2)) + 1;
-        }
-
-        for (int j = 0; j < consumersCount; j++) {
-            consumeAmounts[j] = (int)(Math.random() * (bufferMax / 2)) + 1;
-        }
-
         for (int j = 0; j < producersCount; j++) {
             final int producerId = j;
             producers[j] = new Thread(() -> {
                 for (produceLog[producerId] = 0;; produceLog[producerId]++) {
-                    pc.produce(produceAmounts[producerId]);
-                    try {
-                        Thread.sleep(1);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }   
+                    pc.produce(producerId + 1);
                 }
             });
         }
@@ -47,13 +31,7 @@ public class Measure {
             final int consumerId = j;
             consumers[j] = new Thread(() -> {
                 for (consumeLog[consumerId] = 0;; consumeLog[consumerId]++) {
-                    pc.consume(consumeAmounts[consumerId]);
-                    try {
-                        Thread.sleep(1);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }   
-                    
+                    pc.consume(consumerId + 1);
                 }
             });
         }
@@ -70,10 +48,10 @@ public class Measure {
         for (int k = 0; k < 30; k++) {
             System.out.print(k + ". ");
             for (int i = 0; i < producersCount; i++)
-                System.out.print("+" + produceAmounts[i] + ": " + produceLog[i] + "  ");
+                System.out.print("+" + (i + 1) + ": " + produceLog[i] + "  ");
             
             for (int i = 0; i < consumersCount; i++)
-                System.out.print("-" + consumeAmounts[i] + ": " + consumeLog[i] + "  ");
+                System.out.print("-" + (i + 1) + ": " + consumeLog[i] + "  ");
 
             System.out.println();
             try {
@@ -94,27 +72,11 @@ public class Measure {
             int[] produceLog = new int[producersCount];
             int[] consumeLog = new int[consumersCount];
 
-            int[] produceAmounts = new int[producersCount];
-            int[] consumeAmounts = new int[consumersCount];
-
-            for (int j = 0; j < producersCount; j++) {
-                produceAmounts[j] = (int)(Math.random() * (bufferMax / 2)) + 1;
-            }
-
-            for (int j = 0; j < consumersCount; j++) {
-                consumeAmounts[j] = (int)(Math.random() * (bufferMax / 2)) + 1;
-            }
-
             for (int j = 0; j < producersCount; j++) {
                 final int producerId = j;
                 producers[j] = new Thread(() -> {
                     for (produceLog[producerId] = 0;; produceLog[producerId]++) {
-                        pc.produce(produceAmounts[producerId]);
-                        try {
-                            Thread.sleep(1);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }   
+                        pc.produce(producerId + 1);   
                     }
                 });
             }
@@ -123,13 +85,7 @@ public class Measure {
                 final int consumerId = j;
                 consumers[j] = new Thread(() -> {
                     for (consumeLog[consumerId] = 0;; consumeLog[consumerId]++) {
-                        pc.consume(consumeAmounts[consumerId]);
-                        try {
-                            Thread.sleep(1);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }   
-                        
+                        pc.consume(consumerId + 1);
                     }
                 });
             }
@@ -146,10 +102,10 @@ public class Measure {
             for (int k = 0; k < 30; k++) {
                 System.out.print(k + ". ");
                 for (int i = 0; i < producersCount; i++)
-                    System.out.print("+" + produceAmounts[i] + ": " + produceLog[i] + "  ");
+                    System.out.print("+" + (i + 1) + ": " + produceLog[i] + "  ");
                 
                 for (int i = 0; i < consumersCount; i++)
-                    System.out.print("-" + consumeAmounts[i] + ": " + consumeLog[i] + "  ");
+                    System.out.print("-" + (i + 1) + ": " + consumeLog[i] + "  ");
 
                 System.out.println();
                 try {
@@ -170,27 +126,11 @@ public class Measure {
         int[] produceLog = new int[producersCount];
         int[] consumeLog = new int[consumersCount];
 
-        int[] produceAmounts = new int[producersCount];
-        int[] consumeAmounts = new int[consumersCount];
-
-        for (int j = 0; j < producersCount; j++) {
-            produceAmounts[j] = (int)(Math.random() * (bufferMax / 2)) + 1;
-        }
-
-        for (int j = 0; j < consumersCount; j++) {
-            consumeAmounts[j] = (int)(Math.random() * (bufferMax / 2)) + 1;
-        }
-
         for (int j = 0; j < producersCount; j++) {
             final int producerId = j;
             producers[j] = new Thread(() -> {
                 for (produceLog[producerId] = 0;; produceLog[producerId]++) {
-                    pc.produce(produceAmounts[producerId]);
-                    try {
-                        Thread.sleep(1);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }   
+                    pc.produce(producerId + 1);
                 }
             });
         }
@@ -199,12 +139,7 @@ public class Measure {
             final int consumerId = j;
             consumers[j] = new Thread(() -> {
                 for (consumeLog[consumerId] = 0;; consumeLog[consumerId]++) {
-                    pc.consume(consumeAmounts[consumerId]);
-                    try {
-                        Thread.sleep(1);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }   
+                    pc.consume(consumerId + 1);
                     
                 }
             });
@@ -222,10 +157,10 @@ public class Measure {
         for (int k = 0; k < 30; k++) {
             System.out.print(k + ". ");
             for (int i = 0; i < producersCount; i++)
-                System.out.print("+" + produceAmounts[i] + ": " + produceLog[i] + "  ");
+                System.out.print("+" + (i + 1) + ": " + produceLog[i] + "  ");
             
             for (int i = 0; i < consumersCount; i++)
-                System.out.print("-" + consumeAmounts[i] + ": " + consumeLog[i] + "  ");
+                System.out.print("-" + (i + 1) + ": " + consumeLog[i] + "  ");
 
             System.out.println();
             try {

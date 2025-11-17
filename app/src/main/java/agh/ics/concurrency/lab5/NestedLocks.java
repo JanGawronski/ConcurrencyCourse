@@ -6,8 +6,8 @@ import java.util.concurrent.locks.ReentrantLock;
 public class NestedLocks {
     private int buffer = 0;
     private final int bufferMax;
-    private final ReentrantLock prodLock = new ReentrantLock();
-    private final ReentrantLock consLock = new ReentrantLock();
+    private final ReentrantLock prodLock = new ReentrantLock(true);
+    private final ReentrantLock consLock = new ReentrantLock(true);
     private final ReentrantLock lock = new ReentrantLock();
     private final Condition prod = lock.newCondition();
     private final Condition cons = lock.newCondition();

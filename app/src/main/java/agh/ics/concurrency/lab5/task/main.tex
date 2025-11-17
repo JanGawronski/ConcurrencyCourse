@@ -1,0 +1,231 @@
+\documentclass[12pt, a4paper]{article}
+\usepackage{fullpage}
+\usepackage[T1]{fontenc}
+\usepackage{multicol}
+\usepackage{amsmath}
+\numberwithin{figure}{subsection}
+\numberwithin{table}{subsection}
+\usepackage{array}
+\usepackage{listings}
+\lstset{language=Java,
+    basicstyle=\ttfamily,
+    keywordstyle=\color{blue},
+    stringstyle=\color{red},
+    commentstyle=\color{green},
+    morecomment=[l][\color{magenta}]{\#}
+}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{adjustbox}
+\usepackage{xcolor}
+\usepackage{caption}
+\renewcommand{\thefigure}{\textbf{\arabic{section}.\arabic{subsection}.\arabic{figure}}}
+\renewcommand{\figurename}{\textbf{Rysunek}}
+\renewcommand{\thetable}{\textbf{\arabic{section}.\arabic{subsection}.\arabic{table}}}
+\renewcommand{\tablename}{\textbf{Tabela}}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    filecolor=black,      
+    urlcolor=black,
+    pdftitle={Pomiary porównawcze},
+    pdfauthor={Jan Gawroński},
+    pdfpagemode=FullScreen,
+    }
+
+\title{\huge{Pomiary porównawcze}}
+\author{\large{Jan Gawroński}}
+\date{18.11.2025}
+
+\begin{document}
+  \maketitle
+
+    \section{2 warunki}
+    \subsection{Kod}
+    \begin{lstlisting}
+public class RandomProduceConsume {
+    private int buffer = 0;
+    private final int bufferMax;
+    private final ReentrantLock lock = new ReentrantLock(true);
+    private final Condition notFull = lock.newCondition();
+    private final Condition notEmpty = lock.newCondition();
+
+    public RandomProduceConsume(int bufferMax) {
+        this.bufferMax = bufferMax;
+    }   
+
+    public void produce(int amount) {
+        lock.lock();
+        try {
+            while (buffer + amount >= bufferMax)
+                notFull.await();
+            buffer += amount;
+            notEmpty.signal();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            lock.unlock();    
+        }    
+    }
+
+    public void consume(int amount) {
+        lock.lock();
+        try {
+            while (buffer - amount < 0)
+                notEmpty.await();
+            buffer -= amount;
+            notFull.signal();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            lock.unlock();        
+        }
+    }
+}
+    \end{lstlisting}
+
+    \subsection{Wykresy}
+    \begin{figure}[H]
+        \includegraphics[width=\textwidth]{2_conditionbuffer40.png}
+    \end{figure}
+
+    \begin{figure}[H]
+        \includegraphics[width=\textwidth]{2_conditionbuffer400.png}
+    \end{figure}
+
+    \section{4 warunki}
+    \subsection{Kod}
+    \begin{lstlisting}
+ublic class CorrectRandomProduceConsume {
+    private int buffer = 0;
+    private final int bufferMax;
+    private final ReentrantLock lock = new ReentrantLock(true);
+    private final Condition firstProd = lock.newCondition();
+    private final Condition restProd = lock.newCondition();
+    private final Condition firstCons = lock.newCondition();
+    private final Condition restCons = lock.newCondition();
+
+    private boolean isFirstProducerWaiting = false;
+    private boolean isFirstConsumerWaiting = false;
+
+    public CorrectRandomProduceConsume(int bufferMax) {
+        this.bufferMax = bufferMax;
+    }   
+
+    public void produce(int amount) {
+        lock.lock();
+        try {
+            while (isFirstProducerWaiting)
+                restProd.await();
+            isFirstProducerWaiting = true;
+            while (buffer + amount >= bufferMax)
+                firstProd.await();
+            buffer += amount;
+            isFirstProducerWaiting = false;
+            restProd.signal();
+            firstCons.signal();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            lock.unlock();    
+        }    
+    }
+
+    public void consume(int amount) {
+        lock.lock();
+        try {
+            while (isFirstConsumerWaiting)
+                restCons.await();
+            isFirstConsumerWaiting = true;
+            while (buffer - amount < 0)
+                firstCons.await();
+            buffer -= amount;
+            isFirstConsumerWaiting = false;
+            restCons.signal();
+            firstProd.signal();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            lock.unlock();    
+        }
+    }
+}
+    \end{lstlisting}
+
+    \subsection{Wykresy}
+    \begin{figure}[H]
+        \includegraphics[width=\textwidth]{4_conditionbuffer40.png}
+    \end{figure}
+
+    \begin{figure}[H]
+        \includegraphics[width=\textwidth]{4_conditionbuffer400.png}
+    \end{figure}
+
+    \section{Zagnieżdżone blokady}
+    \subsection{Kod}
+    \begin{lstlisting}
+public class NestedLocks {
+    private int buffer = 0;
+    private final int bufferMax;
+    private final ReentrantLock prodLock = new ReentrantLock(true);
+    private final ReentrantLock consLock = new ReentrantLock(true);
+    private final ReentrantLock lock = new ReentrantLock();
+    private final Condition prod = lock.newCondition();
+    private final Condition cons = lock.newCondition();
+
+
+    public NestedLocks(int bufferMax) {
+        this.bufferMax = bufferMax;
+    }   
+
+    public void produce(int amount) {
+        prodLock.lock();
+        lock.lock();
+        try {
+            while (buffer + amount >= bufferMax)
+                prod.await();
+            buffer += amount;
+            cons.signal();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            lock.unlock();
+            prodLock.unlock();    
+        }    
+    }
+
+    public void consume(int amount) {
+        consLock.lock();
+        lock.lock();
+        try {
+            while (buffer - amount < 0)
+                cons.await();
+            buffer -= amount;
+            prod.signal();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            lock.unlock();
+            consLock.unlock();    
+        }    
+    }
+}
+
+    \end{lstlisting}
+
+    \subsection{Wykresy}
+    \begin{figure}[H]
+        \includegraphics[width=\textwidth]{nestedlocksbuffer40.png}
+    \end{figure}
+
+    \begin{figure}[H]
+        \includegraphics[width=\textwidth]{nestedlocksbuffer400.png}
+    \end{figure}
+
+    \section{Wnioski}
+    Zwiększony bufor zwiększa przepustowość zgodnie z oczekiwaniami.\\
+    Najszybszym rozwiązaniem okazały się zagnieżdżone blokady, wynika to z tego, że blokady to szybszy mechanizm niż warunki.\\
+
+\end{document}

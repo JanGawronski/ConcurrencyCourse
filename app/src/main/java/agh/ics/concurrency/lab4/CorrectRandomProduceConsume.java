@@ -6,7 +6,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class CorrectRandomProduceConsume {
     private int buffer = 0;
     private final int bufferMax;
-    private final ReentrantLock lock = new ReentrantLock();
+    private final ReentrantLock lock = new ReentrantLock(true);
     private final Condition firstProd = lock.newCondition();
     private final Condition restProd = lock.newCondition();
     private final Condition firstCons = lock.newCondition();

@@ -7,8 +7,8 @@ import agh.ics.concurrency.lab5.Measure;
 public class App {
 
     public static void main(String[] args) {
-        new Measure().run2condition(10, 10, 20);
-        new Measure().run4condition(10, 10, 20);
-        new Measure().runNestedLocks(10, 10, 20);
+        new Measure().run2condition(20, 20, 400);
+        new Measure().run4condition(20, 20, 400);
+        new Measure().runNestedLocks(20, 20, 400);
     }
 }
