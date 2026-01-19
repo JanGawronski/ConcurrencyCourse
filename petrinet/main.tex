@@ -1,0 +1,147 @@
+\documentclass[12pt, a4paper]{article}
+\usepackage{fullpage}
+\usepackage[T1]{fontenc}
+\usepackage{multicol}
+\usepackage{amsmath}
+\numberwithin{figure}{subsection}
+\numberwithin{table}{subsection}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{placeins}
+\usepackage{adjustbox}
+\usepackage{xcolor}
+\usepackage{caption}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepgfplotslibrary{groupplots}
+\usepackage{pgfplotstable}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    filecolor=black,      
+    urlcolor=black,
+    pdftitle={Sieci Petriego},
+    pdfauthor={Jan Gawroński},
+    pdfpagemode=FullScreen,
+    }
+
+\title{\huge{Sieci Petriego}}
+\author{\large{Jan Gawroński}}
+\date{20.01.2026}
+
+\begin{document}
+    \maketitle
+    \section{Zadanie 1}
+      \begin{figure}[H]
+          \centering
+          \includegraphics[width=\textwidth]{1/net.png}
+      \end{figure}
+      \begin{figure}[H]
+          \centering
+          \includegraphics[width=0.8\textwidth]{1/sim.png}
+      \end{figure}
+      \begin{figure}[H]
+          \centering
+          \includegraphics[width=0.5\textwidth]{1/reach.png}
+      \end{figure}
+      \begin{figure}[H]
+          \centering
+          \includegraphics[width=0.8\textwidth]{1/invariant.png}
+      \end{figure}
+    \section{Zadanie 2}
+      \begin{figure}[H]
+          \centering
+          \includegraphics[width=0.8\textwidth]{2/net.png}
+      \end{figure}
+      \begin{figure}[H]
+          \centering
+          \includegraphics[width=0.5\textwidth]{2/invariant.png}
+      \end{figure}
+      Sieć nie jest pokryta niezmiennikami, więc nie jest odwracalna.
+      \begin{figure}[H]
+          \centering
+          \includegraphics[width=0.5\textwidth]{2/reach.png}
+      \end{figure}
+      Sieć jest żywa. Sieć cały czas przechodzi przez cykl $T_0, T_1, T_2$, używając po koleji każdego z przejść.
+
+      Sieć nie jest ograniczona, ponieważ w miejscu $P_3$ może się nagromadzić dowolna liczba znaczników.
+
+    \section{Zadanie 3}
+      \begin{figure}[H]
+          \centering
+          \includegraphics[width=0.8\textwidth]{3/net.png}
+      \end{figure}
+      \begin{figure}[H]
+          \centering
+          \includegraphics[width=0.5\textwidth]{3/invariant.png}
+      \end{figure}
+      Równania niezmnieników miejc pokazują ile znaczników zawsze bedzię w jakiejś grupie miejsc.
+      Równanie $M(P_0) + M(P_1) + M(P_2) = 1$ to równanie sekcji krytycznej.
+    
+    \section{Zadanie 4}
+      \begin{figure}[H]
+          \centering
+          \includegraphics[width=0.8\textwidth]{4/net.png}
+      \end{figure}
+      \begin{figure}[H]
+          \centering
+          \includegraphics[width=0.5\textwidth]{4/invariant.png}
+      \end{figure}
+      Sieć jest zachowawcza, widać to po 3 równaniach niezmienników miejsc, każde z tych równań ma rozłączne składniki.
+      Równanie $M(P_6) + M(P_7) = 3$ mówi nam o rozmiarze bufora.
+    
+    \section{Zadanie 5}
+      \begin{figure}[H]
+          \centering
+          \includegraphics[width=0.8\textwidth]{5/net.png}
+      \end{figure}
+      \begin{figure}[H]
+          \centering
+          \includegraphics[width=0.5\textwidth]{5/invariant.png}
+      \end{figure}
+    
+    \section{Zadanie 6}
+      \begin{figure}[H]
+          \centering
+          \includegraphics[width=0.8\textwidth]{6/net.png}
+      \end{figure}
+      \begin{figure}[H]
+          \centering
+          \includegraphics[width=0.5\textwidth]{6/reach.png}
+      \end{figure}
+      \begin{figure}[H]
+          \centering
+          \includegraphics[width=0.5\textwidth]{6/state.png}
+      \end{figure}
+    \section{Zadanie 7}
+      \begin{figure}[H]
+          \centering
+          \includegraphics[width=\textwidth]{1/net.png}
+      \end{figure}
+      \begin{figure}[H]
+          \centering
+          \includegraphics[width=0.8\textwidth]{1/reach.png}
+      \end{figure}
+      \begin{figure}[H]
+          \centering
+          \includegraphics[width=0.6\textwidth]{1/state.png}
+      \end{figure}
+    
+    \section{Zadanie 8}
+      \begin{figure}[H]
+          \centering
+          \includegraphics[width=0.8\textwidth]{8/net.png}
+      \end{figure}
+      \begin{figure}[H]
+          \centering
+          \includegraphics[width=0.5\textwidth]{8/reach.png}
+      \end{figure}
+      \begin{figure}[H]
+          \centering
+          \includegraphics[width=0.8\textwidth]{8/invariant.png}
+      \end{figure}
+
+      \end{document}
